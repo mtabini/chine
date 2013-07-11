@@ -14,7 +14,7 @@ describe('The finite-state machine system', function() {
             
             this.outgoing('step1');
             
-            this.process(function() {
+            this.run(function() {
                 this.transition('step1');
             });
             
@@ -31,7 +31,7 @@ describe('The finite-state machine system', function() {
                 this.machine.run();
             });
             
-            this.process(function() {
+            this.run(function() {
                 this.transition('step2');
             });
             
@@ -47,7 +47,7 @@ describe('The finite-state machine system', function() {
                 this.machine.run();
             });
             
-            this.process(function() {
+            this.run(function() {
                 done();
             });
             
@@ -69,7 +69,7 @@ describe('The finite-state machine system', function() {
             
             this.outgoing('step1');
             
-            this.process(function() {
+            this.run(function() {
                 this.transition('step3');
             });
             
@@ -85,7 +85,7 @@ describe('The finite-state machine system', function() {
                 this.machine.run();
             });
             
-            this.process(function() {
+            this.run(function() {
                 this.transition('step2');
             });
             
@@ -109,7 +109,7 @@ describe('The finite-state machine system', function() {
             
             this.outgoing('step1');
             
-            this.process(function() {
+            this.run(function() {
                 this.transition('step3');
             });
             
@@ -125,7 +125,7 @@ describe('The finite-state machine system', function() {
                 this.machine.run();
             });
             
-            this.process(function() {
+            this.run(function() {
                 this.transition('step2');
             });
             
@@ -147,7 +147,7 @@ describe('The finite-state machine system', function() {
             
             this.outgoing('step12');
             
-            this.process(function() {
+            this.run(function() {
                 this.transition('step3');
             });
             
