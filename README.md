@@ -1,6 +1,6 @@
 # Chine: a finite-state machine execution engine
 
-Chine allows you to split a task into a variety of steps that can be executed asynchronously by a finite-state machine (fsm). The machine can be executed in a deterministic, but arbitrarily complex, sequence.
+Chine (pronounced “sheen”) allows you to split a task into a variety of steps that can be executed asynchronously by a finite-state machine (fsm). The machine can be executed in a deterministic, but arbitrarily complex, sequence.
 
 ## Example
 
