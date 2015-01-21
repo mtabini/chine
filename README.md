@@ -21,34 +21,34 @@ var fsm = new Chine('initial');
 
 fsm.state(function() {
     // Assign a name
-    
+
     this.name('initial');
-    
+
     // Define the states from which it is legal
     // to transition to this state. Attempts to transition
     // to or from anything else will result in an exception
-    
+
     this.incoming('wait for username');
     this.outgoing('wait for username');
-    
+
     // Execute this code as soon as the machine transitions into
     // this state
 
     this.enter(function() {
         // In this case, force the machine to run as soon as you
         // transition, triggering the execution of this state automatically
-        
+
         this.machine.run();
     });
-    
+
     // This code is execute when the machine is run in this state
     // This closure *must* either transition to a new state; attempting
     // to run the machine on the same state twice without transitioning
     // to a new state first will result in an exception.
-    
+
     this.run(function() {
         console.log('Enter username');
-        
+
         // Force a transition
         this.transition('wait for username');
     });
@@ -60,15 +60,15 @@ fsm.state(function() {
     this.name('wait for username');
     this.incoming('initial');
     this.outgoing('success', 'initial');
-    
+
     this.run(function(input) {
         if (input == 'marco') {
             console.log('Congratulations! You unlock the secret');
-            
+
             this.transition('success');
         } else {
             console.log('Invalid username. No prize for you.\n');
-            
+
             this.transition('initial');
         }
     });
@@ -79,7 +79,7 @@ fsm.state(function() {
 fsm.state(function() {
     this.name('success');
     this.incoming('wait for username');
-    
+
     this.enter(function() {
         this.emit('success');
     });
@@ -116,24 +116,24 @@ fsm.run();
 
 ## What happens in this script
 
-Any time the `run` method of the machine is executed, the corresponding `run` method of the current state is invoked. At each state, you get to decide what can be done and what the next state is going to be. Chine helps you by giving you way to express which steps are admissible in input and output, thus reducing the complexity of the overall task. 
+Any time the `run` method of the machine is executed, the corresponding `run` method of the current state is invoked. At each state, you get to decide what can be done and what the next state is going to be. Chine helps you by giving you way to express which steps are admissible in input and output, thus reducing the complexity of the overall task.
 
 Here's what happens in this script as you go through its execution (you can run it a copy of it in the `/demo` directory):
 
     node demo/auth.js
-    
+
 As the script starts, it defines the various states of the fsm and specifies the starting state, `initial`. It then creates a `readline` object and starts listening for user input.
 
 The `initial` state's `run` method is invoked when the last line of the script is executed; it outputs a string of text and then transitions to `wait for username`. The transition is legal, because `wait for username` is in `initial`'s outgoing routes, and `initial` is in `wait for username`'s incoming routes. If this weren't the case, or if you tried to transition to a non-existing route, Chine would throw an exception.
 
     > Enter a username
     invalid
-    
-We have now entered a new line of text, which causes the `line` event to trigger on our `readline` instance. The `fsm.run` method is used as its handler; it receives the text of the line, which is transparently passed to the `run` method of the current state. 
+
+We have now entered a new line of text, which causes the `line` event to trigger on our `readline` instance. The `fsm.run` method is used as its handler; it receives the text of the line, which is transparently passed to the `run` method of the current state.
 
 Here, we check the input and transition to `success` if it's correct. In `success`'s `run` method, we output some more text and, since `Chine` is a subclass of `EventEmitter`, emit the `success` event, which is caught by a handler that terminates the script.
 
-If the value the user has input is _incorrect,_ on the other hand, we transition back to `initial`. In `initial`, we now have an `enter` handler, which is triggered as soon as the machine enters the state. In enter, we simply tell the machine to run again, which causes our state to be executed and the cycle to start from the beginning. 
+If the value the user has input is _incorrect,_ on the other hand, we transition back to `initial`. In `initial`, we now have an `enter` handler, which is triggered as soon as the machine enters the state. In enter, we simply tell the machine to run again, which causes our state to be executed and the cycle to start from the beginning.
 
 This is important, because transitioning to a state does not cause it to be executed—if we didn't have an `enter` handler that forces the machine to execute one more time, the process would just stall. (Incidentally, the `enter` handler is not called when the machine is first run in its starting state.)
 
